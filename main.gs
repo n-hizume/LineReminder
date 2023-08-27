@@ -11,16 +11,17 @@ async function remind() {
   //   }
   // }
 
-  await Promise.all(
-    Array.from(remindUserMap).map(async ([userLineId, userName]) => {
-      if (!userTempMap.has(userName)) {
-        await sendMessage(
-          userLineId,
-          `${userName}さん、体温を提出してください。`
-        ).catch((error) => putDataToLogSheet(error.message));
-      }
-    })
-  );
+  const sendMessageHandler = async function ([userLineId, userName]) {
+    // 体温が未提出なら
+    if (!userTempMap.get(userName)) {
+      await sendMessage(
+        userLineId,
+        `${userName}さん、体温を提出してください。`
+      ).catch((error) => putDataToLogSheet(error.message));
+    }
+  };
+
+  await Promise.all(Array.from(remindUserMap).map(sendMessageHandler));
 }
 
 /**
@@ -46,13 +47,13 @@ async function sendForm() {
     return todayStr + "\n" + "本日も体温を提出してください。\n" + url + "\n";
   };
 
-  await Promise.all(
-    Array.from(sendFormUserMap).map(async ([userLineId, userName]) => {
-      if (!userTempMap.has(userName)) {
-        await sendMessage(userLineId, generateMessage(userName)).catch(
-          (error) => putDataToLogSheet(error.message)
-        );
-      }
-    })
-  );
+  const sendMessageHandler = async function ([userLineId, userName]) {
+    if (!userTempMap.has(userName)) {
+      await sendMessage(userLineId, generateMessage(userName)).catch((error) =>
+        putDataToLogSheet(error.message)
+      );
+    }
+  };
+
+  await Promise.all(Array.from(sendFormUserMap).map(sendMessageHandler));
 }

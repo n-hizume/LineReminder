@@ -75,8 +75,9 @@ function getUserInfoMapFromUserTableSheet_(sheetName) {
  */
 function putUserInfoToRemindSheet(userLineId, userName) {
   const remindUserMap = getUserInfoMapFromRemindSheet();
-  if (remindUserMap.has(userLineId))
+  if (remindUserMap.has(userLineId)) {
     throw new AlreadyExistError(`userLineId "${userLineId}" is already exist.`);
+  }
   putDataToSheet_(LINE_SS_REMIND_SHEET_NAME, [userName, userLineId]);
 }
 
@@ -88,13 +89,14 @@ function putUserInfoToRemindSheet(userLineId, userName) {
  */
 function putUserInfoToSendFormSheet(userLineId, userName) {
   const sendFormUserMap = getUserInfoMapFromSendFormSheet();
-  if (sendFormUserMap.has(userLineId))
+  if (sendFormUserMap.has(userLineId)) {
     throw new AlreadyExistError(`userLineId "${userLineId}" is already exist.`);
+  }
   putDataToSheet_(LINE_SS_SENDFORM_SHEET_NAME, [userName, userLineId]);
 }
 
 /**
- * LINE botが受信した情報をログとしてシートに書き込む
+ * ログを書き込む
  * @param {string} data 書き込むデータ
  */
 function putDataToLogSheet(data) {
