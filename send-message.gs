@@ -8,7 +8,7 @@ const HEADERS = {
  * ユーザにLINEでメッセージを送信する
  * @param {string} userId ユーザのLINE ID
  * @param {string} message 送信するメッセージ
- * @returns {Promise<Object>} LINE APIのresponse
+ * @returns {Promise<void>}
  * @throws {LineTransmissionError} LINE APIのresponseが200以外の場合
  */
 async function sendMessage(userId, message) {
