@@ -55,6 +55,7 @@ function getUserInfoMapFromSendFormSheet() {
 function getUserInfoMapFromUserTableSheet_(sheetName) {
   const sheet = SpreadsheetApp.openById(LINE_SS_ID).getSheetByName(sheetName); //シートの読み込み
   const lastRow = sheet.getLastRow(); //シートのデータが存在する最終行を取得
+  if (lastRow === 1) return new Map(); // データがない場合は空のMapを返す
   const values = sheet.getRange(2, 1, lastRow - 1, 2).getValues(); //シートのデータを二次元配列で取得
 
   const userInfoMap = new Map();
