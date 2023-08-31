@@ -10,6 +10,9 @@ async function doPost(e) {
 
   // レスポンスを解析
   const params = JSON.parse(response);
+  if(params.events[0].type !== "message") {
+    return;
+  }
   const userLineId = params.events[0].source.userId;
   const message = params.events[0].message.text;
 
@@ -43,12 +46,12 @@ async function doPostWhenState1_(userLineId, message) {
     const userName = message;
     // リマインド未登録の場合登録し、その旨をLINEで送信
     putUserInfoToRemindSheet(userLineId, userName);
-    const message =
+    const reply =
       userName +
       "さんを登録しました。夜9時頃までに提出がない場合にLINEでお知らせします。\n" +
       "毎朝の体温提出フォームの送信も希望する場合は、「希望する」とLINEで送ってください。\n" +
       "毎朝8時頃に、体温提出フォームのURLを送ります。";
-    await sendMessage(userLineId, message);
+    await sendMessage(userLineId, reply);
   } else {
     await sendMessage(
       userLineId,
